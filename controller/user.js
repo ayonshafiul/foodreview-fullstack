@@ -7,6 +7,12 @@ module.exports.handleRegister = async (req, res) => {
   const email = body.email;
   const password = body.password;
 
+  if (!email && !password) {
+    return res
+      .status(400)
+      .json({ success: false, msg: "No email or password" });
+  }
+
   const saltRounds = 10;
   const hashedpass = await bcrypt.hash(password, saltRounds);
 
@@ -14,12 +20,12 @@ module.exports.handleRegister = async (req, res) => {
     const checkEmailResults = await user.checkEmail(email);
     if (checkEmailResults.length == 0) {
       const inserUserResults = await user.insertUser(email, hashedpass);
-      res.send("user inserted");
+      res.status(200).json({ success: true, msg: "User Inserted" });
     } else {
-      res.send("email already exists");
+      res.status(400).json({ success: false, msg: "email already exists" });
     }
   } catch (err) {
-    res.send(err);
+    res.status(400).json({ success: false, msg: err.message });
   }
 };
 
@@ -33,17 +39,21 @@ module.exports.handleLogin = async (req, res) => {
     typeof email == "undefined" ||
     typeof password == "undefined"
   ) {
-    return res.status(400).send("email or password cannot be empty");
+    return res
+      .status(400)
+      .json({ success: false, token: "empty email or password" });
   }
   try {
     const loginQuery = await user.login(email);
     if (loginQuery.length == 0) {
-      return res.send("User doesn't exist");
+      return res
+        .status(400)
+        .json({ success: false, token: "user doesn't exist" });
     }
     const storedPassword = loginQuery[0].password;
     const passwordMatch = await bcrypt.compare(password, storedPassword);
     if (!passwordMatch) {
-      return res.send("Password doesn't match");
+      return res.send({ success: false, token: "password doesn't match" });
     }
     const jwt_token = await jwt.sign(
       { userID: loginQuery[0].userID },
@@ -53,8 +63,27 @@ module.exports.handleLogin = async (req, res) => {
       maxAge: 900000,
       httpOnly: true,
     });
-    return res.send("Log in successfull");
+    return res.status(200).json({ success: true, token: jwt_token });
   } catch (err) {
-    return res.send(err);
+    return res.json(err);
+  }
+};
+
+module.exports.checkLogin = async (req, res) => {
+  const cookieToken = req.cookies["jwt"];
+  const authorizationToken = req.headers["authorization"];
+
+  console.log(req.headers);
+  if (!cookieToken && !authorizationToken) {
+    return res.status(200).json({ success: false, msg: "Token doesn't exist" });
+  }
+
+  let token = cookieToken ? cookieToken : authorizationToken;
+
+  try {
+    const payload = await jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    return res.status(200).send({ success: true, msg: "autheticated" });
+  } catch (err) {
+    return res.status(400).json({ success: false, msg: err.message });
   }
 };

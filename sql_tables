@@ -4,226 +4,46 @@ CREATE TABLE user (
     password varchar(60),
 );
 
-CREATE TABLE faculty(
-    facultyID int AUTO_INCREMENT,
-    fuid binary(16),
-    facultyName varchar(50),
-    departmentID int,
-    facultyInitials varchar(3) not null,
-    teaching double not null default '0.00',
-    grading double not null default '0.00',
-    approved boolean,
-    friendliness double not null default '0.00',
-    voteCount int not null default '0',
-    duplicateCount int not null default '0',
-    upVoteSum int not null default '0',
-    downVoteSum int not null default '0',
-    Primary Key(facultyID),
-    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    index f(fuid),
-    index faculty(facultyInitials, departmentID, upVoteSum)
+CREATE TABLE restaurant(
+    restaurantID int AUTO_INCREMENT,
+    restaurantName varchar(50),
+    restaurantDescription varchar(200),
+    rating double not null default '0.00',
+    ratingSum double not null default '0.00',
+    ratingCount int not null default '0',
+    Primary Key(restaurantID)
+);
+
+CREATE TABLE food (
+    foodID int AUTO_INCREMENT,
+    restaurantID int,
+    foodName varchar(50),
+    foodPrice double not null default '0.00',
+    rating double not null default '0.00',
+    ratingSum double not null default '0.00',
+    ratingCount int not null default '0',
+    Primary Key(foodID),
+    Foreign Key(restaurantID) references restaurant(restaurantID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE restaurantReview (
+    userID int,
+    restaurantID int,
+    rating double not null default '0.0',
+    review varchar(500),
+    Primary Key(userID, restaurantID),
+    Foreign Key(userID) references user(userID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(restaurantID) references restaurant(restaurantID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE foodReview (
+    userID int,
+    foodID int,
+    rating double not null default '0.0',
+    review varchar(500),
+    Primary Key(userID, foodID),
+    Foreign Key(userID) references user(userID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(foodID) references food(foodID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
-CREATE TABLE facultyverify (
-    facultyID int AUTO_INCREMENT,
-    facultyName varchar(50),
-    departmentID int,
-    upVoteSum int not null default '0',
-    downVoteSum int not null default '0',
-    facultyInitials varchar(3) not null,
-    Primary Key(facultyID),
-    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    index facultyverify(facultyInitials, departmentID, upVoteSum)
-);
-
-CREATE TABLE course (
-    courseID int AUTO_INCREMENT,
-    courseTitle varchar(50),
-    cuid binary(16),
-    departmentID int,
-    courseCode varchar(7) not null,
-    approved boolean,
-    difficulty double not null default '0.00',
-    rateCount int not null default '0',
-    Primary Key(courseID),
-    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    index c(cuid)
-);
-
-
-CREATE TABLE courseverify (
-    courseID int AUTO_INCREMENT,
-    courseTitle varchar(50),
-    departmentID int,
-    upVoteSum int not null default '0',
-    downVoteSum int not null default '0',
-    courseCode varchar(6) not null,
-    Primary Key(courseID),
-    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    index courseverify(courseCode, departmentID, upVoteSum)
-);
-
-CREATE TABLE facultyverifyvote (
-    studentID int,
-    facultyID int,
-    upVote int,
-    downVote int,
-    Primary Key(studentID, facultyID),
-    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(facultyID) references facultyverify(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE facultyvote (
-    studentID int,
-    fuid binary(16),
-    upVote int,
-    downVote int,
-    Primary Key(studentID, fuid),
-    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(fuid) references faculty(fuid) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-
-
-CREATE TABLE coursevote (
-    studentID int,
-    courseID int,
-    upVote int,
-    downVote int,
-    Primary Key(studentID, courseID),
-    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(courseID) references courseverify(courseID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE rating (
-    studentID int,
-    facultyID int,
-    courseID int,
-    teaching double  not null default '0.00',
-    grading double not null default '0.00',
-    friendliness double not null default '0.00',
-    Primary Key(facultyID,studentID,courseID),
-    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE comment (
-    commentID int AUTO_INCREMENT,
-    studentID int,
-    facultyID int,
-    courseID int,
-    commentText varchar(510),
-    upVoteSum int not null default '0',
-    downVoteSum int not null default '0',
-    Primary Key(commentID),
-    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE,
-    unique index comment(facultyID, courseID, studentID),
-    index indexComment(facultyID)
-);
-CREATE TABLE commentvote(
-    studentID int,
-    commentID int,
-    upVote int,
-    downVote int,
-    Primary Key(studentID, commentID),
-    Foreign Key (commentID) references comment(commentID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-
-CREATE TABLE complain (
-    complainID int AUTO_INCREMENT,
-    studentID int,
-    complainText varchar(510),
-    upVoteSum int not null default '0',
-    downVoteSum int not null default '0',
-    Primary Key(complainID),
-    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    index upvoteIndex(upVoteSum)
-);
-
-CREATE TABLE complainvote(
-    studentID int,
-    complainID int,
-    upVote int,
-    downVote int,
-    Primary Key(studentID, complainID),
-    Foreign Key (complainID) references complain(complainID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-
-
-CREATE TABLE courserating (
-    studentID int,
-    courseID int,
-    difficulty double not null default '0.00',
-    Primary Key(courseID, studentID),
-    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE coursecomment (
-    commentID int AUTO_INCREMENT,
-    studentID int,
-    courseID int,
-    commentText varchar(510),
-    upVoteSum int not null default '0',
-    downVoteSum int not null default '0',
-    Primary Key(commentID),
-    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE,
-    unique index comment(studentID, commentID)
-);
-
-CREATE TABLE coursecommentvote(
-    studentID int,
-    commentID int,
-    upVote int,
-    downVote int,
-    Primary Key(studentID, commentID),
-    Foreign Key (commentID) references coursecomment(commentID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-
-
-CREATE TABLE query (
-    queryID int AUTO_INCREMENT,
-    studentID int,
-    queryText varchar(510),
-    upVoteSum int not null default '0',
-    downVoteSum int not null default '0',
-    replyCount int not null default '0',
-    Primary Key(queryID),
-    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE reply (
-    replyID int AUTO_INCREMENT,
-    queryID int,
-    upVoteSum int not null default '0',
-    downVoteSum int not null default '0',
-    replyText varchar(510),
-    Primary Key(replyID),
-    Foreign Key(queryID) references query(queryID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE queryvote(
-    studentID int,
-    queryID int,
-    upVote int,
-    downVote int,
-    Primary Key(studentID, queryID),
-    Foreign Key (queryID) references query(queryID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE replyvote(
-    studentID int,
-    replyID int,
-    upVote int,
-    downVote int,
-    Primary Key(studentID, replyID),
-    Foreign Key (replyID) references reply(replyID) ON DELETE CASCADE ON UPDATE CASCADE
-);
