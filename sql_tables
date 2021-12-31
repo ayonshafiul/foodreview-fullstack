@@ -4,6 +4,12 @@ CREATE TABLE user (
     password varchar(60),
 );
 
+CREATE TABLE admin (
+    adminID int AUTO_INCREMENT,
+    email varchar(40),
+    password varchar(60),
+);
+
 CREATE TABLE restaurant(
     restaurantID int AUTO_INCREMENT,
     restaurantName varchar(50),

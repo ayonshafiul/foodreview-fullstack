@@ -58,15 +58,17 @@ module.exports.search = async (query) => {
   return rows;
 };
 
-module.exports.getReview = async (id) => {
+module.exports.getUserReview = async (userID, restaurantID) => {
   const [rows, fields] = await db.query(
-    "SELECT * from restaurantReview where restaurantID = ?",
-    id
+    "SELECT * from restaurantReview where userID = ? and restaurantID = ?",
+    [userID, restaurantID]
   );
   return rows;
 };
 
-module.exports.insertReview = async (body) => {
+module.exports.insertUserReview = async (userID, restaurantID,  body) => {
+  body.userID = userID;
+  body.restaurantID = restaurantID;
   const [rows, fields] = await db.query(
     "INSERT into restaurantreview set ?",
     body
@@ -74,10 +76,28 @@ module.exports.insertReview = async (body) => {
   return rows;
 };
 
-module.exports.updateRestaurantReview = async (id, body) => {
+module.exports.updateUserRestaurantReview = async (userID, restaurantID, body) => {
   const [rows, fields] = await db.query(
-    "UPDATE restaurant set ? where restaurantID = ?",
-    [body, id]
+    "UPDATE restaurantReview set ? where userID = ? and restaurantID = ?",
+    [body, userID, restaurantID]
+  );
+  return rows;
+};
+
+module.exports.insertSystemRestaurantReview = async (restaurantID, body) => {
+  const newRating = body.rating;
+  const [rows, fields] = await db.query(
+    "UPDATE restaurant set ratingSum = ratingSum + ?, ratingCount = ratingCount + 1, rating = ratingSum / ratingCount where  restaurantID = ?",
+    [newRating, restaurantID]
+  );
+  return rows;
+};
+
+module.exports.updateSystemRestaurantReview = async (restaurantID, oldRating, body) => {
+  const ratingDelta = body.rating - oldRating;
+  const [rows, fields] = await db.query(
+    "UPDATE restaurant set ratingSum = ratingSum + ?, rating = ratingSum / ratingCount where restaurantID = ?",
+    [ratingDelta, restaurantID]
   );
   return rows;
 };

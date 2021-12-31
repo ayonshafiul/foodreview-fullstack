@@ -33,9 +33,9 @@ module.exports.delete = async (req, res) => {
 };
 
 module.exports.getAll = async (req, res) => {
-  const id = req.params.restaurantID;
+  const restaurantID = req.params.restaurantID;
   try {
-    const results = await restaurant.getAll();
+    const results = await restaurant.getAll(restaurantID);
     return utils.successData(res, results);
   } catch (err) {
     return utils.error(res, err.message);
@@ -83,4 +83,37 @@ module.exports.search = async (req, res) => {
 
 module.exports.review = async (req, res) => {
   const body = req.body;
+  const userID = 2; // todo update with authenticated user
+  const restaurantID = req.params.restaurantID;
+  try {
+    const reviewResults = await restaurant.getUserReview(userID, restaurantID);
+    if (reviewResults.length == 0) {
+      const insertUserResults = await restaurant.insertUserReview(
+        userID,
+        restaurantID,
+        body
+      );
+      const insertSystemResults = await restaurant.insertSystemRestaurantReview(
+        restaurantID,
+        body
+      );
+      return utils.success(res, "review inserted");
+    } else {
+      const currentReview = reviewResults[0];
+      const oldRating = currentReview.rating;
+      const updateUserResults = await restaurant.updateUserRestaurantReview(
+        userID,
+        restaurantID,
+        body
+      );
+      const updateSystemResults = await restaurant.updateSystemRestaurantReview(
+        restaurantID,
+        oldRating,
+        body
+      );
+      return utils.success(res, "review updated");
+    }
+  } catch (err) {
+    return utils.error(res, err.message);
+  }
 };

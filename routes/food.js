@@ -2,9 +2,21 @@ const express = require("express");
 
 const router = express.Router();
 
+const auth = require("../middlewares/auth");
+
 const food = require("../controller/food");
 
-router.post("/food/insert", food.insert);
+router.get("/food/get/restaurant/:restaurantID", food.getAll);
+
+router.get("/food/get/:foodID", food.getOne);
+
+router.get("/food/toprated", food.getTopRated);
+
+router.get("/food/popular", food.getPopular);
+
+router.get("/food/search", food.search);
+
+router.post("/food/insert/:restaurantID", food.insert);
 
 router.post("/food/update/:foodID", food.update);
 
