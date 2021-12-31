@@ -2,12 +2,14 @@ CREATE TABLE user (
     userID int AUTO_INCREMENT,
     email varchar(40),
     password varchar(60),
+    Primary Key(userID)
 );
 
 CREATE TABLE admin (
     adminID int AUTO_INCREMENT,
     email varchar(40),
     password varchar(60),
+    Primary Key(adminID)
 );
 
 CREATE TABLE restaurant(

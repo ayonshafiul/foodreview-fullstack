@@ -1,10 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const PORT = process.env.PORT || 8080;
-const authRouter = require("./routes/auth");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const auth = require("./middlewares/auth");
+const userRouter = require("./routes/user");
+const adminRouter = require("./routes/admin");
 const foodRouter = require("./routes/food");
 const restaurantRouter = require("./routes/restaurant");
 
@@ -20,7 +21,8 @@ server.use(
   })
 );
 
-server.use("/api/", authRouter);
+server.use("/api/", userRouter);
+server.use("/api/", adminRouter);
 server.use("/api/", foodRouter);
 server.use("/api/", restaurantRouter);
 

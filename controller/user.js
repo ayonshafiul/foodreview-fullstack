@@ -60,7 +60,7 @@ module.exports.handleLogin = async (req, res) => {
       process.env.JWT_SECRET_TOKEN
     );
     res.cookie("jwt", jwt_token, {
-      maxAge: 900000,
+      maxAge: 7 * 84600 * 1000,
       httpOnly: true,
     });
     return res.status(200).json({ success: true, token: jwt_token });
