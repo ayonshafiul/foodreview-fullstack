@@ -4,22 +4,24 @@ const router = express.Router();
 
 const restaurant = require("../controller/restaurant");
 
-router.get("/restaurant/get", restaurant.getAll);
+const auth = require("../middlewares/auth");
 
-router.get("/restaurant/get/:restaurantID", restaurant.getOne);
+router.get("/restaurant/get", auth.basic, restaurant.getAll);
 
-router.get("/restaurant/toprated", restaurant.getTopRated);
+router.get("/restaurant/get/:restaurantID", auth.basic,  restaurant.getOne);
 
-router.get("/restaurant/popular", restaurant.getPopular);
+router.get("/restaurant/toprated", auth.basic,  restaurant.getTopRated);
 
-router.get("/restaurant/search", restaurant.search);
+router.get("/restaurant/popular", auth.basic,  restaurant.getPopular);
 
-router.post("/restaurant/insert", restaurant.insert);
+router.get("/restaurant/search", auth.basic,  restaurant.search);
 
-router.post("/restaurant/update/:restaurantID", restaurant.update);
+router.post("/restaurant/insert", auth.advanced,  restaurant.insert);
 
-router.get("/restaurant/delete/:restaurantID", restaurant.delete);
+router.post("/restaurant/update/:restaurantID", auth.advanced,  restaurant.update);
 
-router.post("/restaurant/review/:restaurantID", restaurant.review);
+router.get("/restaurant/delete/:restaurantID", auth.advanced,  restaurant.delete);
+
+router.post("/restaurant/review/:restaurantID", auth.basic,  restaurant.review);
 
 module.exports = router;

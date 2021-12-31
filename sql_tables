@@ -26,6 +26,7 @@ CREATE TABLE food (
     foodID int AUTO_INCREMENT,
     restaurantID int,
     foodName varchar(50),
+    restaurantDescription varchar(200),
     foodPrice double not null default '0.00',
     rating double not null default '0.00',
     ratingSum double not null default '0.00',
