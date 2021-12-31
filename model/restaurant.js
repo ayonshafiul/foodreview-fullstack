@@ -50,6 +50,13 @@ module.exports.getPopular = async () => {
   return rows;
 };
 
+module.exports.getReviews = async (restaurantID) => {
+  const [rows, fields] = await db.query(
+    "Select * from restaurantReview where restaurantID = ?", restaurantID
+  );
+  return rows;
+};
+
 module.exports.search = async (query) => {
   const [rows, fields] = await db.query(
     "Select * from restaurant where restaurantName like ? or restaurantDescription like ?",

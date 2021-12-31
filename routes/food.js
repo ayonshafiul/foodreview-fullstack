@@ -23,5 +23,10 @@ router.post("/food/update/:foodID", auth.advanced, food.update);
 router.get("/food/delete/:foodID", auth.advanced, food.delete);
 
 router.post("/food/review/:foodID", auth.basic, food.review);
+router.get(
+    "/food/review/:foodID",
+    auth.basic,
+    food.getReviews
+  );
 
 module.exports = router;

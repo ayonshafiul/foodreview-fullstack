@@ -71,6 +71,16 @@ module.exports.getPopular = async (req, res) => {
   }
 };
 
+module.exports.getReviews = async (req, res) => {
+  const restaurantID = req.params.restaurantID;
+  try {
+    const results = await restaurant.getReviews(restaurantID);
+    return utils.successData(res, results);
+  } catch (err) {
+    return utils.error(res, err.message);
+  }
+};
+
 module.exports.search = async (req, res) => {
   const query = req.query.q;
   try {

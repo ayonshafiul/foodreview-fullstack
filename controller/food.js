@@ -82,6 +82,16 @@ module.exports.search = async (req, res) => {
   }
 };
 
+module.exports.getReviews = async (req, res) => {
+  const foodID = req.params.foodID;
+  try {
+    const results = await food.getReviews(foodID);
+    return utils.successData(res, results);
+  } catch (err) {
+    return utils.error(res, err.message);
+  }
+};
+
 module.exports.review = async (req, res) => {
   const body = req.body;
   const userID = 2; // todo update with authenticated user

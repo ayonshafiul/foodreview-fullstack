@@ -67,6 +67,13 @@ module.exports.getUserReview = async (userID, foodID) => {
   return rows;
 };
 
+module.exports.getReviews = async (foodID) => {
+  const [rows, fields] = await db.query(
+    "Select * from foodReview where foodID = ?", foodID
+  );
+  return rows;
+};
+
 module.exports.insertUserReview = async (userID, foodID, body) => {
   body.userID = userID;
   body.foodID = foodID;

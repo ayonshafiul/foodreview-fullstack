@@ -4,19 +4,29 @@ module.exports.basic = async (req, res, next) => {
   const cookieToken = req.cookies["jwt"];
   const authorizationToken = req.headers["authorization"];
   const adminCookieToken = req.cookies["jwt-admin"];
-  const adminAuthorizationToken = req.headers["authorization-admin"]
+  const adminAuthorizationToken = req.headers["authorization-admin"];
 
-  if (!cookieToken && !authorizationToken && !adminCookieToken && !adminAuthorizationToken) {
+  if (
+    !cookieToken &&
+    !authorizationToken &&
+    !adminCookieToken &&
+    !adminAuthorizationToken
+  ) {
     return res.status(400).json({ success: false, msg: "Token doesn't exist" });
   }
 
   let token = cookieToken ? cookieToken : authorizationToken;
-  let adminToken = adminCookieToken ? adminCookieToken : adminAuthorizationToken;
+  let adminToken = adminCookieToken
+    ? adminCookieToken
+    : adminAuthorizationToken;
 
   try {
     let payload;
-    if(adminToken) {
-      payload =  await jwt.verify(token, process.env.JWT_ADMIN_SECRET_TOKEN);
+    if (adminToken) {
+      payload = await jwt.verify(
+        adminToken,
+        process.env.JWT_ADMIN_SECRET_TOKEN
+      );
     } else {
       payload = await jwt.verify(token, process.env.JWT_SECRET_TOKEN);
     }
