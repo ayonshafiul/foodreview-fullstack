@@ -7,5 +7,9 @@
 }
 
 .container {
-  @apply w-2/3 mx-auto md:max-w-3xl rounded-lg;
+  @apply w-full mx-auto md:max-w-2xl rounded-lg;
+}
+
+.restaurant-list-item-container {
+  @apply m-4 p-4 rounded-xl shadow-lg;
 }

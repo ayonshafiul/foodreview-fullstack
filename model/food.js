@@ -69,7 +69,8 @@ module.exports.getUserReview = async (userID, foodID) => {
 
 module.exports.getReviews = async (foodID) => {
   const [rows, fields] = await db.query(
-    "Select * from foodReview where foodID = ?", foodID
+    "Select * from foodReview where foodID = ?",
+    foodID
   );
   return rows;
 };
@@ -82,6 +83,7 @@ module.exports.insertUserReview = async (userID, foodID, body) => {
 };
 
 module.exports.updateUserfoodReview = async (userID, foodID, body) => {
+  body.review = body.review + " (edited)";
   const [rows, fields] = await db.query(
     "UPDATE foodReview set ? where userID = ? and foodID = ?",
     [body, userID, foodID]

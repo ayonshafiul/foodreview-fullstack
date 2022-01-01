@@ -52,7 +52,8 @@ module.exports.getPopular = async () => {
 
 module.exports.getReviews = async (restaurantID) => {
   const [rows, fields] = await db.query(
-    "Select * from restaurantReview where restaurantID = ?", restaurantID
+    "Select * from restaurantReview where restaurantID = ?",
+    restaurantID
   );
   return rows;
 };
@@ -73,7 +74,7 @@ module.exports.getUserReview = async (userID, restaurantID) => {
   return rows;
 };
 
-module.exports.insertUserReview = async (userID, restaurantID,  body) => {
+module.exports.insertUserReview = async (userID, restaurantID, body) => {
   body.userID = userID;
   body.restaurantID = restaurantID;
   const [rows, fields] = await db.query(
@@ -83,7 +84,12 @@ module.exports.insertUserReview = async (userID, restaurantID,  body) => {
   return rows;
 };
 
-module.exports.updateUserRestaurantReview = async (userID, restaurantID, body) => {
+module.exports.updateUserRestaurantReview = async (
+  userID,
+  restaurantID,
+  body
+) => {
+  body.review = body.review + " (edited)";
   const [rows, fields] = await db.query(
     "UPDATE restaurantReview set ? where userID = ? and restaurantID = ?",
     [body, userID, restaurantID]
@@ -100,7 +106,11 @@ module.exports.insertSystemRestaurantReview = async (restaurantID, body) => {
   return rows;
 };
 
-module.exports.updateSystemRestaurantReview = async (restaurantID, oldRating, body) => {
+module.exports.updateSystemRestaurantReview = async (
+  restaurantID,
+  oldRating,
+  body
+) => {
   const ratingDelta = body.rating - oldRating;
   const [rows, fields] = await db.query(
     "UPDATE restaurant set ratingSum = ratingSum + ?, rating = ratingSum / ratingCount where restaurantID = ?",
