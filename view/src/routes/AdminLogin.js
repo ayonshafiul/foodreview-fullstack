@@ -1,31 +1,35 @@
 import React, { useState } from "react";
-import Input from "../components/Input";
 import Button from "../components/Button";
+import Input from "../components/Input";
 import axios from "axios";
+import { useAdmin } from "../contexts/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  async function register() {
-    if (password !== confirmPassword) {
-      window.alert("Password Mismatch");
-      return;
-    }
+  const { setAdminAuth } = useAdmin();
+  const navigate = useNavigate();
+
+  async function login() {
     if (email === "" || password === "") {
       window.alert("Email or password cannot be empty");
       return;
     }
-    const response = await axios.post("/api/user/register", {
+    const response = await axios.post("/api/admin/login", {
       email: email,
       password: password,
     });
+    console.log(response);
     if (response.data.success) {
-      window.alert("Registration complete");
+      setAdminAuth(true);
+      navigate("restaurant");
+    } else {
+      window.alert(response.data.token);
     }
   }
   return (
-    <div>
+    <>
       <Input name="email" value={email} setValue={setEmail} />
       <Input
         name="password"
@@ -33,15 +37,9 @@ const Register = () => {
         setValue={setPassword}
         inputType="password"
       />
-      <Input
-        name="confirm password"
-        value={confirmPassword}
-        setValue={setConfirmPassword}
-        inputType="password"
-      />
-      <Button onClickHandler={register} label="register" />
-    </div>
+      <Button onClickHandler={login} label="login" />
+    </>
   );
 };
 
-export default Register;
+export default AdminLogin;

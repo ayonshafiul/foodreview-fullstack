@@ -2,22 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import RestaurantList from "../components/RestaurantList";
 import FoodList from "../components/FoodList";
-import { useUser } from "../contexts/AuthProvider";
-import { useNavigate } from "react-router-dom";
 
-const Home = (props) => {
+const AdminRestaurants = (props) => {
   const [topRestaurants, setTopRestaurants] = useState([]);
   const [popularRestaurants, setPopularRestaurants] = useState([]);
   const [topFoodItems, setTopFoodItems] = useState([]);
   const [popularFoodItems, setPopularFoodItems] = useState([]);
-  const { userAuth } = useUser();
-  const navigate = useNavigate();
   useEffect(() => {
     async function getTopRestaurants() {
-      if (!userAuth) {
-        navigate("login");
-        return;
-      }
       const response = await axios.get("/api/restaurant/toprated");
 
       if (response.data.success) {
@@ -43,7 +35,6 @@ const Home = (props) => {
     }
     getTopRestaurants();
   }, []);
-
   return (
     <div>
       <RestaurantList list={topRestaurants} title={"Top restaurants"} />
@@ -54,4 +45,4 @@ const Home = (props) => {
   );
 };
 
-export default Home;
+export default AdminRestaurants;

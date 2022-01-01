@@ -11,6 +11,10 @@ import { useAdmin, useUser } from "./contexts/AuthProvider";
 import Restaurant from "./routes/Restaurant";
 import Food from "./routes/Food";
 import Search from "./routes/Search";
+import AdminLayout from "./routes/AdminLayout";
+import AdminLogin from "./routes/AdminLogin";
+import AdminAddRestaurant from "./routes/AdminAddRestaurant";
+import AdminAddFood from "./routes/AdminAddFood";
 
 function App() {
   const { setAdminAuth } = useAdmin();
@@ -37,7 +41,14 @@ function App() {
         <Route path="search" element={<Search />} />
         <Route path="restaurant/:restaurantID" element={<Restaurant />} />
         <Route path="food/:foodID" element={<Food />} />
-        <Route path="*" element={<NoMatch />} />
+      </Route>
+
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route path="login" element={<AdminLogin />} />
+        <Route path="restaurants" element={<AdminAddRestaurant />} />
+        <Route path="restaurants/add" element={<AdminAddRestaurant />} />
+        <Route path="foods" element={<Search />} />
+        <Route path="foods/add" element={<AdminAddFood />} />
       </Route>
     </Routes>
   );

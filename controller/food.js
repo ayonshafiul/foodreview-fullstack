@@ -42,6 +42,15 @@ module.exports.getAll = async (req, res) => {
     return utils.error(res, err.message);
   }
 };
+
+module.exports.getEverything = async (req, res) => {
+  try {
+    const results = await food.getEverything();
+    return utils.successData(res, results);
+  } catch (err) {
+    return utils.error(res, err.message);
+  }
+};
 module.exports.getOne = async (req, res) => {
   const id = req.params.foodID;
   try {

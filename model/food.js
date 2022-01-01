@@ -37,6 +37,11 @@ module.exports.getAll = async (restaurantID) => {
   return rows;
 };
 
+module.exports.getEverything = async () => {
+  const [rows, fields] = await db.query("Select *  from food");
+  return rows;
+};
+
 module.exports.getTopRated = async () => {
   const [rows, fields] = await db.query(
     "Select * from food order by rating desc"
