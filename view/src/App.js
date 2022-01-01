@@ -10,6 +10,7 @@ import axios from "axios";
 import { useAdmin, useUser } from "./contexts/AuthProvider";
 import Restaurant from "./routes/Restaurant";
 import Food from "./routes/Food";
+import Search from "./routes/Search";
 
 function App() {
   const { setAdminAuth } = useAdmin();
@@ -33,6 +34,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="search" element={<Search />} />
         <Route path="restaurant/:restaurantID" element={<Restaurant />} />
         <Route path="food/:foodID" element={<Food />} />
         <Route path="*" element={<NoMatch />} />

@@ -9,14 +9,17 @@ const Layout = () => {
         <Link className="link-item" to="/">
           Home
         </Link>
+        <Link className="link-item" to="/search">
+          Search
+        </Link>
 
         {!userAuth && (
           <>
-            <Link className="link-item" to="/Login">
+            <Link className="link-item" to="/login">
               Login
             </Link>
 
-            <Link className="link-item" to="/Register">
+            <Link className="link-item" to="/register">
               Register
             </Link>
           </>

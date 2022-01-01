@@ -12,7 +12,7 @@ const Input = (props) => {
       {showLabel && (
         <label
           className="text-gray-800 font-semibold block my-3 text-md"
-          for={name}
+          htmlFor={name}
         >
           {name.toUpperCase()}
         </label>
