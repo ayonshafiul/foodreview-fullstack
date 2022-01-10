@@ -103,7 +103,7 @@ module.exports.getReviews = async (req, res) => {
 
 module.exports.review = async (req, res) => {
   const body = req.body;
-  const userID = 2; // todo update with authenticated user
+  const userID = req.user.userID;
   const foodID = req.params.foodID;
   try {
     const reviewResults = await food.getUserReview(userID, foodID);

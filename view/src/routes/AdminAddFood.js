@@ -43,7 +43,8 @@ const AdminAddFood = () => {
       <select
         value={restaurantID}
         onChange={(event) => {
-          setRestauranID(event.target.value);
+          console.log(event.target.value);
+          setRestauranID(parseInt(event.target.value));
         }}
       >
         {restaurants.map((r) => {
