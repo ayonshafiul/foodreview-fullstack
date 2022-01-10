@@ -3,6 +3,7 @@ const utils = require("../utils/utils");
 
 module.exports.insert = async (req, res) => {
   const body = req.body;
+  console.log(body);
   const restaurantID = req.params.restaurantID;
   try {
     const results = await food.insert(restaurantID, body);

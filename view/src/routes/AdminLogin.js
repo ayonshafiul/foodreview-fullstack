@@ -23,7 +23,7 @@ const AdminLogin = () => {
     console.log(response);
     if (response.data.success) {
       setAdminAuth(true);
-      navigate("restaurant");
+      navigate("/admin/restaurants/add");
     } else {
       window.alert(response.data.token);
     }
