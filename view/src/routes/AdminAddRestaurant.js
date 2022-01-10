@@ -6,7 +6,7 @@ import axios from "axios";
 const AdminAddRestaurant = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  // const [] = useState("")
+  
   async function insert() {
     const response = await axios.post("/api/restaurant/insert", {
       restaurantName: name,

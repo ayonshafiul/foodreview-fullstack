@@ -57,7 +57,7 @@ module.exports.handleLogin = async (req, res) => {
     }
     const jwt_token = await jwt.sign(
       { adminID: loginQuery[0].adminID },
-      process.env.JWT_SECRET_TOKEN
+      process.env.JWT_ADMIN_SECRET_TOKEN
     );
     res.status(200).cookie("jwt-admin", jwt_token, {
       maxAge: 7 * 84600 * 1000,
@@ -65,7 +65,7 @@ module.exports.handleLogin = async (req, res) => {
     });
     return res.status(200).json({ success: true, token: jwt_token });
   } catch (err) {
-    return res.json(err);
+    return res.status(400).json(err);
   }
 };
 

@@ -8,7 +8,7 @@ const AdminAddFood = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [restaurants, setRestaurants] = useState([]);
-  const [restaurantID, setRestauranID] = useState(-1);
+  const [restaurantID, setRestauranID] = useState(0);
 
   useEffect(() => {
     async function get() {
@@ -18,6 +18,10 @@ const AdminAddFood = () => {
     get();
   }, []);
   async function insert() {
+    if (restaurantID == 0) {
+      window.alert("Please select a restaurant!");
+      return;
+    }
     const response = await axios.post("/api/food/insert/" + restaurantID, {
       foodName: name,
       foodDescription: description,
@@ -28,6 +32,7 @@ const AdminAddFood = () => {
       setName("");
       setDescription("");
       setPrice("");
+      setRestauranID(0);
     } else {
       console.log(response.data);
     }
@@ -43,10 +48,10 @@ const AdminAddFood = () => {
       <select
         value={restaurantID}
         onChange={(event) => {
-          console.log(event.target.value);
           setRestauranID(parseInt(event.target.value));
         }}
       >
+        <option value="0">Select Restaurant</option>
         {restaurants.map((r) => {
           return (
             <option

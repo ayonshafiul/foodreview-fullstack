@@ -3,10 +3,12 @@ const utils = require("../utils/utils");
 
 module.exports.insert = async (req, res) => {
   const body = req.body;
+  console.log(body);
   try {
     const results = await restaurant.insert(body);
     return utils.success(res, "Inserted");
   } catch (err) {
+    console.log(err);
     return utils.error(res, err.message);
   }
 };
