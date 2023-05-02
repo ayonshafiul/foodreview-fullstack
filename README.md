@@ -1,5 +1,5 @@
 # foodreview
-###(Serves as the backend for the android app on [foodreview-android](https://github.com/ayonshafiul/foodreview-android))
+### (Serves as the backend for the android app on [foodreview-android](https://github.com/ayonshafiul/foodreview-android))
 
 
 A simple food review app with restaurant listings where users can leave rating and comments about their experience and a simple admin panel to manage listings.
