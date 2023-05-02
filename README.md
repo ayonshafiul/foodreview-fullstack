@@ -2,13 +2,13 @@
 ### (Serves as the backend for the android app on [foodreview-android](https://github.com/ayonshafiul/foodreview-android))
 
 
-A simple food review app with restaurant listings where users can leave rating and comments about their experience and a simple admin panel to manage listings.
+A simple food review app with a dedicated admin panel for restaurant owners and restaurant homepage allowing users to leave rating and reviews about their experiences.
 
 
 
 ```
---|view folder contains frontend built using react.
---|controller, model contains the other parts of mvc pattern.
+--|frontend folder contains frontend built using react.
+--|backend folder contains controller, model contains the other parts of the project that is built following the mvc pattern.
 ```
 
 - Create a .env file with filling in with following variables
